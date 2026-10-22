@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Para Alguien Especial</title>
+  <style>
+    body { margin:0; padding:0; background:linear-gradient(135deg,#ffe5ec,#ffc2d1); font-family:'Segoe UI',sans-serif; display:flex; justify-content:center; align-items:center; height:100vh; color:#4a4a4a; position:relative; overflow:hidden; transition: background 0.5s ease; }
+    .container { text-align:center; width:100%; display:flex; justify-content:center; align-items:center; position:relative; }
+    .welcome-screen { text-align:center; animation:fadeIn 0.8s ease; }
+    .btn-enter { background-color:#ff477e; color:white; border:none; padding:15px 30px; font-size:18px; font-weight:bold; border-radius:25px; cursor:pointer; box-shadow:0 4px 15px rgba(255,71,126,0.4); transition:all 0.2s; }
+    .btn-enter:hover { background-color:#ff1453; transform:scale(1.05); }
+    .envelope-wrapper { cursor:pointer; transition:transform 0.3s; }
+    .envelope-wrapper:hover { transform:scale(1.05); }
+    .envelope { width:150px; height:100px; background-color:#ff85a2; border-radius:0 0 10px 10px; position:relative; margin:0 auto; display:flex; justify-content:center; align-items:center; box-shadow:0 8px 16px rgba(0,0,0,0.1); }
+    .heart { font-size:40px; animation:pulse 1.2s infinite; }
+    @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.15);} }
+    .click-text { margin-top:15px; font-weight:bold; color:#ff477e; }
+    .card { background:white; padding:30px; border-radius:20px; box-shadow:0 10px 25px rgba(0,0,0,0.1); max-width:360px; width:90%; animation:fadeIn 0.8s ease; position:relative; z-index:10; }
+    .card-img { width:100%; border-radius:12px; max-height:200px; object-fit:cover; }
+    .message { line-height:1.6; font-size:15px; margin:15px 0; }
+    .signature { color:#ff477e; margin-bottom:10px; }
+    .side-img-left { position:absolute; left:calc(50% - 460px); width:220px; height:280px; border-radius:15px; object-fit:cover; box-shadow:0 8px 20px rgba(0,0,0,0.1); z-index:5; animation:fadeIn 1s ease; }
+    .side-img-right { position:absolute; right:calc(50% - 460px); width:220px; height:280px; border-radius:15px; object-fit:cover; box-shadow:0 8px 20px rgba(0,0,0,0.1); z-index:5; animation:fadeIn 1s ease; }
+    .corner-card { position:fixed; background:white; border:none; padding:12px; width:120px; border-radius:15px; cursor:pointer; z-index:20; box-shadow:0 6px 15px rgba(0,0,0,0.08); transition:all 0.3s ease; font-family:sans-serif; font-weight:bold; text-align:center; }
+    .corner-card:hover { transform:translateY(-4px); box-shadow:0 10px 20px rgba(255,71,126,0.25); }
+    .c-icon { font-size:20px; display:block; margin-bottom:4px; }
+    .c-text { font-size:12px; color:#ff477e; display:block; }
+    .top-left { top:20px; left:20px; } .top-right { top:20px; right:20px; }
+    .bottom-left { bottom:85px; left:20px; } .bottom-right { bottom:20px; right:20px; }
+    @media (max-width: 1200px) { .side-img-left,.side-img-right { display:none; } .corner-card { position:static; margin:10px auto; display:block; width:150px; } .container { flex-direction:column; overflow-y:auto; height:100vh; padding:20px 0; } }
+    .modal { position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.4); display:flex; justify-content:center; align-items:center; z-index:100; backdrop-filter:blur(4px); }
+    .modal-content { background:white; padding:25px; border-radius:20px; max-width:340px; width:85%; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.2); }
+    .btn-close { background-color:#7d7d7d; color:white; border:none; padding:8px 20px; border-radius:15px; cursor:pointer; margin-top:15px; }
+    .timer-box { position:fixed; bottom:15px; left:15px; background-color:rgba(255,255,255,0.65); padding:8px 12px; border-radius:10px; font-size:11px; color:#666; text-align:left; box-shadow:0 4px 10px rgba(0,0,0,0.05); z-index:50; }
+    .timer-title { font-weight:bold; color:#ff477e; }
+    .hidden { display:none !important; }
+    @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+  </style>
+</head>
+<body>
+<audio id="miMusica" src="musica.mp3" preload="auto" loop></audio>
+<audio id="miMusica2" src="musica2.mp3" preload="auto" loop></audio>
+
+<div class="timer-box hidden" id="togetherTimer"><div class="timer-title">Tiempo juntos:</div><div id="timerContent">Cargando...</div></div>
+<div class="container">
+  <div class="welcome-screen" id="welcomeScreen"><h1 style="color:#ff477e; margin-bottom:25px;">Te he hecho un regalito 💕</h1><button class="btn-enter" id="btnEnter">Ábrelo :P</button></div>
+  <div class="envelope-wrapper hidden" id="envelope"><div class="envelope"><div class="heart">❤️</div></div><p class="click-text">Dale a la cartita pocha (Espero que te guste la música)</p></div>
+  <div class="card hidden" id="card"><img src="img/foto.jpg" alt="Nuestro Momento" class="card-img"><h1>¡Feliz cumpleaños cariño! 💕</h1><p class="message">Realmente, esto es lo mínimo que puedo hacerte porque te mereces el mundo entero y más. Ya te he visto cumplir años tres veces :P y estoy deseando que sean muchísimos más, porque anhelo un futuro contigo. Espero que te guste <3</p><p class="signature">With love <br><strong>Kitty &lt;3</strong></p></div>
+  <img src="img/decoracion1.jpg" alt="Deco 1" class="side-img-left hidden" id="sideImg1"><img src="img/decoracion2.jpg" alt="Deco 2" class="side-img-right hidden" id="sideImg2">
+  <button class="corner-card top-left hidden" id="cBtn1" onclick="openModal('modal1')"><span class="c-icon">📸</span><span class="c-text">Algún momento :P</span></button>
+  <button class="corner-card top-right hidden" id="cBtn2" onclick="openModal('modal2')"><span class="c-icon">💕</span><span class="c-text">Otro momento juntos</span></button>
+  <button class="corner-card bottom-left hidden" id="cBtn3" onclick="openModalConMusica('modal3')"><span class="c-icon">🎵</span><span class="c-text">Una canción <3</span></button>
+  <button class="corner-card bottom-right hidden" id="cBtn4" onclick="openModal('modal4')"><span class="c-icon">💌</span><span class="c-text">Nuestra historia</span></button>
+</div>
+<div class="modal hidden" id="modal1"><div class="modal-content"><img src="img/foto2.jpg" class="card-img"><h3>Algún momento :P</h3><p class="message">¿Te acuerdas en época de exámenes? Yo me acuerdo perfectamente de como me salvaste un examen de inglés el día de antes y probablemente fue el dia más feliz de mi vida sigo sin palabras para agradecerte el esfuerzo que hiciste para ayudarme en época de exámenes <33</p><button class="btn-close" onclick="closeModal('modal1')">Cerrar</button></div></div>
+<div class="modal hidden" id="modal2"><div class="modal-content"><img src="img/foto3.jpg" class="card-img"><h3>Otro momento juntos</h3><p class="message">Supongo que recordarás este día, pero para mí probablemente sea el mas importante de mi vida, ese mismo día que te atreviste a pasar una tarde con mis amigos, también fue el día que te declaré mis sentimientos y que te abracé estando temblando pues has sido la única persona con la que de verdad he sentido algo verdadero y tenía miedo a liarla</p><button class="btn-close" onclick="closeModal('modal2')">Cerrar</button></div></div>
+<div class="modal hidden" id="modal3"><div class="modal-content"><img src="img/foto4.jpg" class="card-img"><h3>Una canción <3</h3><p class="message">Esto es un poco triste, pero es la canción que más me consolaba cuando te fuiste y a la vez la que más escuchaba cuando estaba contigo, tiene un montón de significado para los dos y además de la canción que se escucha en el inicio es otra de las canciones que creo que más nos representa. Muchas gracias por cambiar un poquito de mi estilo musical <3</p><button class="btn-close" onclick="closeModalConMusica('modal3')">Cerrar</button></div></div>
+<div class="modal hidden" id="modal4"><div class="modal-content"><img src="img/foto5.jpg" class="card-img"><h3>Nuestra historia</h3><p class="message">Para mí un día cualquiera de instituto, para ti otro día más de nervios y ansiedad porque no sabrías que pasaría en el instituto nuevo en el que te has metido, crucé miradas contigo pero no le di mucha importancia. Al tiempo me enteré que tenemos un amigo con el que coincidíamos y fue el que nos "presentó" te hice un chiste sobre un comentario que hiciste sobre latín al cual nadie le hizo caso, te reíste y desde ahí llevo enamorado de tu mirada. Una tarde decidí seguirte por instagram y los dos hicimos lo mismo, preguntarle al amigo con el que coincidíamos que quien era cada cual. Ese mismo día me escribiste y descubrimos que tenemos un montón de cosas en común y en un momento después de tantas memorias, recuerdos, eventos, quedadas y millones de cosas más, aquí estamos. 3 cumpleaños hemos pasado juntos desde que nos conocemos y aún así no hay día en el que me arrepienta de haberte conocido. Eres y seguirás siendo la persona que tendré tatuada en el corazón porque el flechazo que me pegaste en aquel entonces, no se vive todos los dias, solo se vive una vez en toda la vida, y tengo toda la suerte del mundo de que ese flechazo me llegara con 16 años y a ti con 15. Te amo desde el día en el que te conozco. Muchísimas gracias por dejarme pasar estos años a tu lado y los que siguen <3</p><button class="btn-close" onclick="closeModal('modal4')">Cerrar</button></div></div>
+<script>
+  const fechaInicio = new Date(2024, 9, 16, 0, 0);
+  const m1 = document.getElementById('miMusica'); const m2 = document.getElementById('miMusica2');
+  document.getElementById('btnEnter').addEventListener('click', function() {
+    document.getElementById('welcomeScreen').classList.add('hidden'); document.getElementById('envelope').classList.remove('hidden');
+    m1.play().catch(function(e){console.log(e)});
+  });
+  document.getElementById('envelope').addEventListener('click', function() {
+    document.getElementById('envelope').classList.add('hidden'); document.getElementById('card').classList.remove('hidden'); document.getElementById('togetherTimer').classList.remove('hidden');
+    document.getElementById('sideImg1').classList.remove('hidden'); document.getElementById('sideImg2').classList.remove('hidden');
+    document.getElementById('cBtn1').classList.remove('hidden'); document.getElementById('cBtn2').classList.remove('hidden'); document.getElementById('cBtn3').classList.remove('hidden'); document.getElementById('cBtn4').classList.remove('hidden');
+
+    document.body.style.background = "url('img/fondo.jpg') no-repeat center center / cover";
+
+    updateTimer(); setInterval(updateTimer, 1000);
+  });
+  function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+  function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+  function openModalConMusica(id) { m1.pause(); m2.play().catch(function(e){}); openModal(id); }
+  function closeModalConMusica(id) { m2.pause(); m2.currentTime = 0; m1.play().catch(function(e){}); closeModal(id); }
+  function updateTimer() {
+    const diff = new Date() - fechaInicio;
+    const d = Math.floor(diff / 86400000); const h = Math.floor((diff % 86400000) / 3600000); const m = Math.floor((diff % 3600000) / 60000); const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('timerContent').innerHTML = `<b>${d}</b>d, <b>${h}</b>h, <b>${m}</b>m y <b>${s}</b>s`;
+  }
+</script>
+</body>
+</html>
